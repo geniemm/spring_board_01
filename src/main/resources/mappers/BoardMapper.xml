@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.care.root.mybatis.board.BoardMapper">
+	<resultMap id="board" type="com.care.root.board.dto.BoardDTO">
+	    <id property="writeNo" column="Write_no"/>
+	    <result property="title" column="Title"/>
+	    <result property="content" column="Content"/>
+	    <result property="savedate" column="Savedate"/>
+	    <result property="hit" column="Hit"/>
+	    <result property="imageFileName" column="Image_file_name"/>
+	    <result property="id" column="id"/>
+	</resultMap>
+	
+	<select id="boardAllList" resultMap="board">
+		select * from mvc_board
+	</select>
+	<insert id="writeSave" >
+	    insert into mvc_board(write_no,id,title,content,image_file_name)
+	    values(mvc_board_seq.nextval,#{id},#{title},#{content},#{imageFileName})
+	</insert>
+	
+	<select id="getContent" resultMap="board">
+	 	select * from mvc_board where Write_no=#{writeNo}
+	</select>
+	
+</mapper>
