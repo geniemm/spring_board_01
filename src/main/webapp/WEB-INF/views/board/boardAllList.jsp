@@ -30,7 +30,11 @@
 				</tr>
 			</c:forEach>
 		<tr>
-		<td colspan="6"><a href="writeForm">글 작성</a>
+		<td colspan="6">
+			<c:forEach var="n" begin="1" end="${repeat }">
+			 	<a href="boardAllList?num=${n }"> ${n }</a>
+			 </c:forEach>
+ 		<a href="writeForm">글 작성</a>
 		</tr>
 	</table>
 </body>

@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 
 @Controller
 @RequestMapping("board")
@@ -30,8 +32,10 @@ public class BoardController {
 	@Autowired BoardService bs;
 	
 	@GetMapping("boardAllList")
-	public String boardAllList(Model model) {
-		model.addAttribute("list",bs.boardAllList());
+	public String boardAllList(Model model, @RequestParam(required=false, defaultValue="1") int num) {
+		Map<String, Object> map = bs.boardAllList(num);
+		model.addAttribute("list",map.get("list"));
+		model.addAttribute("repeat",map.get("repeat"));
 		System.out.println();
 		return "board/boardAllList";
 		
@@ -39,7 +43,7 @@ public class BoardController {
 	
 	@GetMapping("writeForm")
 	public String writeForm() {
-		return "board/writeForm";
+		return "board/write_form";
 	}
 	@PostMapping("writeSave")
 	public void writeSave(BoardDTO dto,
@@ -73,6 +77,31 @@ public class BoardController {
 		FileCopyUtils.copy(in, res.getOutputStream());
 		in.close();
 		
+	}
+	
+	@GetMapping("modify_form")
+	public String modifyForm(@RequestParam int writeNo,Model model) {
+		model.addAttribute("content",bs.getContent(writeNo));
+		return "board/modify_form";
+	}
+	
+	@PostMapping("modify")
+	public void modify(BoardDTO dto, 
+						@RequestParam MultipartFile file,
+						HttpServletResponse res) throws Exception{
+		String msg = bs.modify(dto, file);
+		res.setContentType("text/html; charset=utf-8");
+		PrintWriter out =res.getWriter();
+		out.print(msg);
+	}
+	
+	@GetMapping("delete")
+	public void delete(@RequestParam int writeNo,
+						@RequestParam String fileName, HttpServletResponse res) throws Exception{
+		String msg = bs.delete(writeNo, fileName);
+		res.setContentType("text/html; charset=utf-8");
+		PrintWriter out = res.getWriter();
+		out.print( msg );
 	}
 }
 

@@ -14,7 +14,7 @@
 
 </head>
 <body>
-   <%@ include file="../default/header.jsp" %>
+	 <%@ include file="../default/header.jsp" %>
    <form action="writeSave" method="post" enctype="multipart/form-data">
       <b>작성자</b><br>
       <input type="text" name="id" value="${login }" readonly>
@@ -33,7 +33,6 @@
       <input type="submit" value="등록">
       <a href="boardAllList">목록이동</a>
    </form>
-</body>
 </html>
 
 
